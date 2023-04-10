@@ -4,7 +4,7 @@ PACKAGE_NAME = 'Demo'
 PACKAGE_VERSION = '0.1'
 INSTALL_REQUIRES = [
     'selene==2.0.0b17',
-    'selenium',
+    'whocares',
     'pytest',
     'allure-pytest',
     'PyHamcrest',
