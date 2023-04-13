@@ -60,4 +60,3 @@ def test_user_with_different_confirm_password(userdata, not_matched_confirm_pass
     main_page_steps.fill_form(userdata[1], userdata[2], userdata[3], userdata[4], userdata[5], userdata[6],
                               userdata[7], userdata[8], userdata[9], userdata[10], userdata[11])
     main_page_assert_steps.check_confirm_password_error_message(not_matched_confirm_password_error_message)
-    
