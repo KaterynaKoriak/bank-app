@@ -31,6 +31,9 @@ class MainPage(BasePage):
     welcome_page_title = browser.element(by.xpath("/html/head/title"))
     welcome_username = browser.element(by.xpath("//h1[@class ='title']"))
     welcome_user = browser.element(by.xpath("//p[@class='smallText']"))
+    error_existing_username = browser.element(by.xpath("//span[@id='customer.username.errors']"))
+    required_password_error = browser.element(by.xpath("//span[@id='customer.password.errors']"))
+    password_confirmation_error = browser.element(by.xpath("//span[@id='repeatedPassword.errors']"))
 
     def navigate(self):
         super().navigate()
