@@ -23,7 +23,6 @@ class BaseApi:
 
     session = requests.session()
     api_url = ''
-    url = ''
     api_key = {api_url: None}  # it's possible to share apikey between all child's when get it once or
     # use different keys for different services
 
@@ -59,16 +58,6 @@ class BaseApi:
             headers = cls.post_headers
         return cls.session.post(f'{cls.api_url}{path}', headers=headers, params=params, json=json, data=data,
                                 files=files, **kwargs)
-
-    @classmethod
-    @api_logger
-    def api_post_from_ui(cls, path: str, headers: dict = None, params: dict = None, data: dict = None,
-                         json: dict = None, files: str = None, **kwargs) -> Response:
-        if not headers:
-            headers = cls.post_headers
-        return cls.session.post(f'{cls.url}{path}', headers=headers, params=params, json=json, data=data,
-                                files=files, **kwargs)
-
 
     @classmethod
     @api_logger

@@ -3,6 +3,7 @@ from addict import Dict
 from hamcrest import equal_to
 from requests import Response
 
+from core.apps.backend.custom_user_api import user_api
 from core.apps.backend.user_api import user_account_api
 from core.testlib.matchers import check_that
 
@@ -26,7 +27,7 @@ class UserApiSteps:
 
     @allure.step("Register customer upon API")
     def register_user(self, user_data: Dict) -> Response:
-        return user_account_api.register_new_customer(user_data)
+        return user_api.register_new_customer(user_data)
 
     @allure.step('Clean DB')
     def clean_db(self):
@@ -48,13 +49,13 @@ class UserApiAssertSteps:
                    f'Customer first name is {user_data.firstName}')
         check_that(customer_api.get('lastName'), equal_to(user_data.lastName),
                    f'Customer lastName is {user_data.lastName}')
-        check_that(customer_api.get('address').get('street'), equal_to(user_data.street),
+        check_that(customer_api.get('address').get('street'), equal_to(user_data.address.street),
                    f'Customer street is {user_data.street}')
-        check_that(customer_api.get('address').get('city'), equal_to(user_data.city),
+        check_that(customer_api.get('address').get('city'), equal_to(user_data.address.city),
                    f'Customer city is {user_data.city}')
-        check_that(customer_api.get('address').get('state'), equal_to(user_data.state),
+        check_that(customer_api.get('address').get('state'), equal_to(user_data.address.state),
                    f'Customer state is {user_data.state}')
-        check_that(customer_api.get('address').get('zipCode'), equal_to(user_data.zipCode),
+        check_that(customer_api.get('address').get('zipCode'), equal_to(user_data.address.zipCode),
                    f'Customer zipCode is {user_data.zipCode}')
         check_that(customer_api.get('phoneNumber'), equal_to(user_data.phoneNumber),
                    f'Customer phone number is {user_data.phoneNumber}')

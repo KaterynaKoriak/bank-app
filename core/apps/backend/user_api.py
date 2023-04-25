@@ -1,13 +1,12 @@
 import allure
 from requests import Response
 from addict import Dict
-from config.env import API_URL, URL
+from config.env import API_URL
 from core.apps.backend.base_api import BaseApi
 
 
 class UserAccountApi(BaseApi):
     api_url = API_URL
-    url = URL
 
     @allure.step("Get customer's accounts info")
     def get_customer_accounts(self, customer_id: int) -> Response:
@@ -21,10 +20,10 @@ class UserAccountApi(BaseApi):
         params = {
             'firstName': user_data.firstName,
             'lastName': user_data.lastName,
-            'street': user_data.street,
-            'city': user_data.city,
-            'state': user_data.state,
-            'zipCode': user_data.zipCode,
+            'street': user_data.address.street,
+            'city': user_data.address.city,
+            'state': user_data.address.state,
+            'zipCode': user_data.address.zipCode,
             'phoneNumber': user_data.phoneNumber,
             'ssn': user_data.ssn,
             'username': user_data.username,
@@ -47,31 +46,6 @@ class UserAccountApi(BaseApi):
             'fromAccountId': from_account_id
         }
         return self.api_post('/createAccount', json=data)
-
-    @allure.step("Register new customer")
-    def register_new_customer(self, user_data: Dict) -> Response:
-        data = {
-            'customer.firstName': user_data.customer.firstName,
-            'customer.lastName': user_data.customer.lastName,
-            'customer.address.street': user_data.customer.address.street,
-            'customer.address.city': user_data.customer.address.city,
-            'customer.address.state': user_data.customer.address.state,
-            'customer.address.zipCode': user_data.customer.address.zipCode,
-            'customer.phoneNumber': user_data.customer.phoneNumber,
-            'customer.ssn': user_data.customer.ssn,
-            'customer.username': user_data.customer.username,
-            'customer.password': user_data.customer.password,
-            'repeatedPassword': user_data.password
-        }
-        headers = {
-            "Content-Type": "application/x-www-form-urlencoded",
-            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;"
-                      "q=0.8,application/signed-exchange;v=b3;q=0.7",
-            "Accept-Encoding": "gzip, deflate",
-            "Connection": "keep-alive",
-            "Cookie": "JSESSIONID=22CB8A2A043A0C6EF3BDDF7F427DF5BF"
-        }
-        return self.api_post_from_ui(f'/register.htm', data=data, headers=headers)
 
     @allure.step("Log in")
     def log_in(self, username: str, password: str) -> Response:

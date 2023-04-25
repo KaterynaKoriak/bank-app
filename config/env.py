@@ -9,6 +9,6 @@ def get(key: str, default: any = None):
 
 
 URL = get('URL', 'http://localhost:8080/parabank')
-API_URL = get('URL', 'http://localhost:8080/parabank/services/bank')
+API_URL = get('URL', f'{URL}/services/bank')
 BROWSER = get('BROWSER', 'chrome')
 REMOTE_IP = get('REMOTE_IP', 'localhost')
