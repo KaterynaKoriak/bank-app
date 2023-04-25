@@ -28,6 +28,14 @@ class UserApiSteps:
     def register_user(self, user_data: Dict) -> Response:
         return user_account_api.register_new_customer(user_data)
 
+    @allure.step('Clean DB')
+    def clean_db(self):
+        return user_account_api.clean_database()
+
+    @allure.step('Initialize DB')
+    def initialize_db(self):
+        return user_account_api.initialize_database()
+
 
 user_api_steps = UserApiSteps()
 

@@ -63,11 +63,27 @@ class UserAccountApi(BaseApi):
             'customer.password': user_data.customer.password,
             'repeatedPassword': user_data.password
         }
-        return self.api_post_from_ui(f'/register.htm', json=data)
+        headers = {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;"
+                      "q=0.8,application/signed-exchange;v=b3;q=0.7",
+            "Accept-Encoding": "gzip, deflate",
+            "Connection": "keep-alive",
+            "Cookie": "JSESSIONID=22CB8A2A043A0C6EF3BDDF7F427DF5BF"
+        }
+        return self.api_post_from_ui(f'/register.htm', data=data, headers=headers)
 
     @allure.step("Log in")
     def log_in(self, username: str, password: str) -> Response:
         return self.api_get(f'/login/{username}/{password}')
+
+    @allure.step("Clean Database")
+    def clean_database(self):
+        return self.api_post('/cleanDB')
+
+    @allure.step("Initialize Database")
+    def initialize_database(self):
+        return self.api_post('/initializeDB')
 
 
 user_account_api = UserAccountApi()
