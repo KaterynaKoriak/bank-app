@@ -72,3 +72,6 @@ class BaseApi:
         if not headers:
             headers = cls.post_headers
         return cls.session.put(f'{cls.api_url}{path}', headers=headers, data=params, json=json)
+
+
+base_api = BaseApi()

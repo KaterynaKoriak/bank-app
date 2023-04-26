@@ -2,8 +2,9 @@ import allure
 from addict import Dict
 from hamcrest import equal_to
 from requests import Response
+from resources.variables import test_params
+from core.apps.backend.ui_api import ui_api
 
-from core.apps.backend.custom_user_api import user_api
 from core.apps.backend.user_api import user_account_api
 from core.testlib.matchers import check_that
 
@@ -27,7 +28,8 @@ class UserApiSteps:
 
     @allure.step("Register customer upon API")
     def register_user(self, user_data: Dict) -> Response:
-        return user_api.register_new_customer(user_data)
+        ui_api.get_registration()
+        return ui_api.post_registration(user_data)
 
     @allure.step('Clean DB')
     def clean_db(self):
@@ -57,14 +59,15 @@ class UserApiAssertSteps:
                    f'Customer state is {user_data.state}')
         check_that(customer_api.get('address').get('zipCode'), equal_to(user_data.address.zipCode),
                    f'Customer zipCode is {user_data.zipCode}')
-        check_that(customer_api.get('phoneNumber'), equal_to(user_data.phoneNumber),
+        check_that(customer_api.get('phoneNumber').lstrip(" , +"), equal_to(user_data.phoneNumber.lstrip("+, ")),
                    f'Customer phone number is {user_data.phoneNumber}')
         check_that(customer_api.get('ssn'), equal_to(user_data.ssn), f'Customer ssn is {user_data.ssn}')
 
     @allure.step("Check that user has account after creation upon API")
     def check_new_users_account(self, customer_id: int) -> None:
         customer_api = user_api_steps.get_customer_accounts_info(customer_id).json()
-        check_that(customer_api[0].get('balance'), equal_to(515.50), 'Customer has 515.50 on his account')
+        check_that(customer_api[0].get('balance'), equal_to(test_params["default_balance"]),
+                   f'Customer has {test_params["default_balance"]} on his account')
         check_that(len(customer_api), equal_to(1), 'Customer has only one account')
 
 
