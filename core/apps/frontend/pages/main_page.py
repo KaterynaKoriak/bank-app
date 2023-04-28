@@ -34,6 +34,9 @@ class MainPage(BasePage):
     error_existing_username = browser.element(by.xpath("//span[@id='customer.username.errors']"))
     required_password_error = browser.element(by.xpath("//span[@id='customer.password.errors']"))
     password_confirmation_error = browser.element(by.xpath("//span[@id='repeatedPassword.errors']"))
+    login_username_input = browser.element(by.name("username"))
+    login_password_input = browser.element(by.name("password"))
+    login_button = browser.element(by.xpath("//input[@value='Log In']"))
 
     def navigate(self):
         super().navigate()
@@ -89,6 +92,15 @@ class MainPage(BasePage):
     @allure.step('Click "Register" button')
     def click_register_button(self):
         self.register_button.click()
+
+    def fill_login_username_input(self, text: str):
+        self.login_username_input.send_keys(text)
+
+    def fill_login_password_input(self, text: str):
+        self.login_password_input.send_keys(text)
+
+    def click_login_button(self):
+        self.login_button.click()
 
 
 main_page = MainPage()

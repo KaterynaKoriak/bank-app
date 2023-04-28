@@ -2,7 +2,7 @@ import allure
 from addict import Dict
 from hamcrest import equal_to
 from requests import Response
-from resources.variables import test_params
+from constants.variables import test_params
 from core.apps.backend.ui_api import ui_api
 
 from core.apps.backend.user_api import user_account_api
@@ -52,13 +52,13 @@ class UserApiAssertSteps:
         check_that(customer_api.get('lastName'), equal_to(user_data.lastName),
                    f'Customer lastName is {user_data.lastName}')
         check_that(customer_api.get('address').get('street'), equal_to(user_data.address.street),
-                   f'Customer street is {user_data.street}')
+                   f'Customer street is {user_data.address.street}')
         check_that(customer_api.get('address').get('city'), equal_to(user_data.address.city),
-                   f'Customer city is {user_data.city}')
+                   f'Customer city is {user_data.address.city}')
         check_that(customer_api.get('address').get('state'), equal_to(user_data.address.state),
-                   f'Customer state is {user_data.state}')
+                   f'Customer state is {user_data.address.state}')
         check_that(customer_api.get('address').get('zipCode'), equal_to(user_data.address.zipCode),
-                   f'Customer zipCode is {user_data.zipCode}')
+                   f'Customer zipCode is {user_data.address.zipCode}')
         check_that(customer_api.get('phoneNumber').lstrip(" , +"), equal_to(user_data.phoneNumber.lstrip("+, ")),
                    f'Customer phone number is {user_data.phoneNumber}')
         check_that(customer_api.get('ssn'), equal_to(user_data.ssn), f'Customer ssn is {user_data.ssn}')
