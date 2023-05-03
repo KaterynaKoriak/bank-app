@@ -7,6 +7,7 @@ from config.env import BASE_URL
 from core.apps.backend.base_api import BaseApi
 from core.testlib.utils import get_random_int
 
+
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
@@ -40,11 +41,11 @@ class UIApi(BaseApi):
         return self.api_get("/admin.htm")
 
     @allure.step("Change default values from admin page")
-    def post_admin_changes(self):
+    def post_admin_changes(self, initial_balance, min_balance):
         data = {
             'accessMode': 'jdbc',
-            'initialBalance': get_random_int(),
-            'minimumBalance': get_random_int(),
+            'initialBalance': initial_balance,
+            'minimumBalance': min_balance,
             'loanProvider': 'ws',
             'loanProcessor': 'funds',
             'loanProcessorThreshold': 20
