@@ -1,7 +1,7 @@
 from functools import wraps
 
 from core.apps.backend.ui_api import ui_api
-from constants.variables import default_balance, default_min_balance
+from constants.variables import DEFAULT_BALANCE, DEFAULT_MIN_BALANCE
 
 
 def register_user(func):
@@ -22,7 +22,7 @@ def edit_default_admin_values(initial_balance, min_balance):
             ui_api.get_admin_page()
             ui_api.post_admin_changes(initial_balance=initial_balance, min_balance=min_balance)
             result = func(*args, **kwargs)
-            ui_api.post_admin_changes(initial_balance=default_balance, min_balance=default_min_balance)
+            ui_api.post_admin_changes(initial_balance=DEFAULT_BALANCE, min_balance=DEFAULT_MIN_BALANCE)
             return result
         return wrapper
     return my_decorator
