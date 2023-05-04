@@ -2,7 +2,7 @@ import allure
 from addict import Dict
 from hamcrest import equal_to
 from requests import Response
-from constants.variables import default_balance
+from constants.variables import DEFAULT_BALANCE
 from core.apps.backend.ui_api import ui_api
 
 from core.apps.backend.user_api import user_account_api
@@ -66,8 +66,8 @@ class UserApiAssertSteps:
     @allure.step("Check that user has account after creation upon API")
     def check_new_users_account(self, customer_id: int) -> None:
         customer_api = user_api_steps.get_customer_accounts_info(customer_id).json()
-        check_that(customer_api[0].get('balance'), equal_to(default_balance),
-                   f'Customer has {default_balance} on his account')
+        check_that(customer_api[0].get('balance'), equal_to(DEFAULT_BALANCE),
+                   f'Customer has {DEFAULT_BALANCE} on his account')
         check_that(len(customer_api), equal_to(1), 'Customer has only one account')
 
 
