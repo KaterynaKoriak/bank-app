@@ -25,7 +25,7 @@ def test_registration(scenario):
 @allure.tag('Main Page')
 @pytest.mark.parametrize('scenario', [Dict(first_name=get_random_str(), last_name='test', address='1234 Daisy Street',
                                            city='Cincinnati', state='Ohio', zip_code=12345, phone=1234567890,
-                                           ssn=987654321, username='kateryna_koriak', password='password',
+                                           ssn=987654321, username='john', password='password',
                                            confirmation_password='password')])
 @pytest.mark.usefixtures('driver')
 def test_user_with_duplicated_username(scenario):
