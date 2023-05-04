@@ -1,8 +1,5 @@
-default_balance = 515.50
-default_min_balance = 100.0
-initialized_db_first_customer_id = 12212
-initialized_db_second_customer_id = 12323
-firstly_created_user_customer_id = 12434
-basic_password = "password"
-test_initial_balance = 1500.0
-test_min_balance = 150.0
+DEFAULT_BALANCE = 515.50
+INITIALIZED_DB_FIRST_CUSTOMER_ID = 12212
+INITIALIZED_DB_SECOND_CUSTOMER_ID = 12323
+FIRSTLY_CREATED_USER_CUSTOMER_ID = 12434
+BASIC_PASSWORD = "password"
