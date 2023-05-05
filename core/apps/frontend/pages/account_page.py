@@ -6,9 +6,6 @@ from core.apps.frontend.pages.base_page import BasePage
 
 
 class AccountPage(BasePage):
-
-    path = ''
-
     accounts_overview_link = browser.element(by.xpath("//a[contains(@href, '/parabank/overview.htm')]"))
     first_account_overview_balance = browser.element(by.xpath("//tr[@ng-repeat='account in accounts'][1]/td[2]"))
     second_account_overview_balance = browser.element(by.xpath("//tr[@ng-repeat='account in accounts'][2]/td[2]"))
@@ -26,9 +23,6 @@ class AccountPage(BasePage):
     login_username_input = browser.element(by.name("username"))
     login_password_input = browser.element(by.name("password"))
     login_button = browser.element(by.xpath("//input[@value='Log In']"))
-
-    def navigate(self):
-        super().navigate()
 
     @allure.step('Click "Open New Account" option on the navigation panel')
     def click_open_new_account_link(self):

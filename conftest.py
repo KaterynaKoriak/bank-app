@@ -12,6 +12,11 @@ from core.apps.backend.user_api import user_account_api
 from constants.variables import BASIC_PASSWORD
 
 
+pytest_plugins = [
+    'steps.fixtures.account_fixtures'
+]
+
+
 @pytest.fixture(scope='function')
 def driver() -> WebDriver:
     LOGGER.info(f'Starting driver')
