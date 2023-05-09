@@ -1,5 +1,5 @@
 import allure
-from selene import by, query
+from selene import by
 from selene.support.shared import browser
 
 from core.apps.frontend.pages.base_page import BasePage
@@ -12,8 +12,6 @@ class MainPage(BasePage):
     only via wrapped methods.
     Please note, that business steps shouldn't be implemented here
     """
-
-    path = ''
 
     register_link = browser.element(by.xpath("//a[contains(@href, 'register.htm')]"))
     first_name_input = browser.element(by.name("customer.firstName"))
@@ -37,9 +35,6 @@ class MainPage(BasePage):
     login_username_input = browser.element(by.name("username"))
     login_password_input = browser.element(by.name("password"))
     login_button = browser.element(by.xpath("//input[@value='Log In']"))
-
-    def navigate(self):
-        super().navigate()
 
     @allure.step('Click "Register" link')
     def click_register_link(self):

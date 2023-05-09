@@ -5,6 +5,8 @@ from requests import Response
 
 from config.env import BASE_URL
 from core.apps.backend.base_api import BaseApi
+from core.testlib.utils import get_random_int
+
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -34,6 +36,25 @@ class UIApi(BaseApi):
             "Content-Type": "application/x-www-form-urlencoded"
         }
         return self.api_post(f'/register.htm', data=data, headers=headers)
+
+    def get_admin_page(self):
+        return self.api_get("/admin.htm")
+
+    @allure.step("Change default values from admin page")
+    def post_admin_changes(self, initial_balance, min_balance):
+        data = {
+            'accessMode': 'jdbc',
+            'initialBalance': initial_balance,
+            'minimumBalance': min_balance,
+            'loanProvider': 'ws',
+            'loanProcessor': 'funds',
+            'loanProcessorThreshold': 20
+        }
+        headers = {
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+        return self.api_post("/admin.htm", data=data, headers=headers)
+
 
 
 ui_api = UIApi()
