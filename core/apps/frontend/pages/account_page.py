@@ -6,17 +6,24 @@ from core.apps.frontend.pages.base_page import BasePage
 
 
 class AccountPage(BasePage):
+    @staticmethod
+    def get_accounts_overview_balance(text):
+        return browser.element(by.xpath(f'//table/tbody/tr/td[count(//table/thead/tr/th[.="Balance*"]'
+                                        f'/preceding-sibling::th)+1][text()="${text}"]'))
+
+    @staticmethod
+    def get_accounts_overview_available_amount(text):
+        return browser.element(by.xpath(f'//table/tbody/tr/td[count(//table/thead/tr/th[.="Available Amount"]'
+                                        f'/preceding-sibling::th)+1][text()="${text}"]'))
+
     accounts_overview_link = browser.element(by.xpath("//a[contains(@href, '/parabank/overview.htm')]"))
-    first_account_overview_balance = browser.element(by.xpath("//tr[@ng-repeat='account in accounts'][1]/td[2]"))
-    second_account_overview_balance = browser.element(by.xpath("//tr[@ng-repeat='account in accounts'][2]/td[2]"))
-    accounts_overview_available_amount = browser.element(by.xpath("//td[@class ='ng-binding'][2]"))
     accounts_overview_total = browser.element(by.xpath("//b[@class='ng-binding']"))
     accounts_overview_title = browser.element(by.xpath("/html/head/title"))
-    minimal_amount_message = browser.element(by.xpath("//form[@ng-submit='submit()']/p[2]/b"))
+    minimal_amount_message = browser.element(by.xpath("//select[@id='type']/following-sibling::p/b"))
     open_new_account = browser.element(by.xpath("//a[contains(@href, '/parabank/openaccount.htm')]"))
     account_opened_title = browser.element(by.xpath("//h1[@class='title']"))
     account_type_dropdown = browser.element(by.xpath("//*[@id='type']"))
-    savings_option = browser.element(by.xpath("//*[@id='type']/option[2]"))
+    savings_option = browser.element(by.xpath("//*[@id='type']/option[text()='SAVINGS']"))
     open_new_account_button = browser.element(by.xpath("//*[@value='Open New Account']"))
     first_name_input = browser.element(by.name("initialBalance"))
     submit_button = browser.element(by.xpath("//input[@value='Submit']"))

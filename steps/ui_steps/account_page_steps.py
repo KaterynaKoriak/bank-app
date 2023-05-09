@@ -34,14 +34,15 @@ class AccountPageAssertSteps:
 
     @allure.step('Check balance on the Account overview page')
     def check_balance(self, initial_balance):
-        check_that(lambda: account_page.first_account_overview_balance().text,
-                   equal_to(f"${format_two_digits_after_comma(initial_balance)}"),
+        balance = account_page.get_accounts_overview_balance(format_two_digits_after_comma(initial_balance))
+        check_that(lambda: balance().text, (f"${format_two_digits_after_comma(initial_balance)}"),
                    f'Account balance = ${initial_balance}')
 
     @allure.step('Check available amount on the Account overview page')
     def check_available_amount(self, initial_balance):
-        check_that(account_page.accounts_overview_available_amount().text,
-                   equal_to(f"${format_two_digits_after_comma(initial_balance)}"),
+        available_amount = account_page.get_accounts_overview_available_amount(
+            format_two_digits_after_comma(initial_balance))
+        check_that(available_amount().text, equal_to(f"${format_two_digits_after_comma(initial_balance)}"),
                    f'Available amount = ${initial_balance}')
 
     @allure.step('Check page title')
@@ -53,7 +54,7 @@ class AccountPageAssertSteps:
     def check_minimal_amount_message(self, min_balance):
         check_that(account_page.minimal_amount_message().text,
                    equal_to(test_messages['minimal_amount_message'].format(min_balance)),
-                   f'${format_two_digits_after_comma(min_balance)} is in the message on the Open new account page')
+                   f'"${format_two_digits_after_comma(min_balance)}" is in the message on the Open new account page')
 
     @allure.step('Check the title "Account Opened!" is displayed')
     def check_opened_account_title(self, title):
@@ -62,14 +63,14 @@ class AccountPageAssertSteps:
     @allure.step('Check that the first account has "initial balance - minimal balance" amount of money')
     def check_first_account_balance(self, initial_balance, minimal_balance):
         actual_balance = initial_balance - minimal_balance
-        check_that(lambda: account_page.first_account_overview_balance().text,
-                   equal_to(f'${format_two_digits_after_comma(actual_balance)}'),
+        balance_value = account_page.get_accounts_overview_balance(format_two_digits_after_comma(actual_balance))
+        check_that(lambda: balance_value().text, equal_to(f'${format_two_digits_after_comma(actual_balance)}'),
                    f'${actual_balance} is the balance on the first account')
 
     @allure.step('Check that the second account has "minimal balance" amount of money')
     def check_second_account_balance(self, minimal_balance):
-        check_that(account_page.second_account_overview_balance().text,
-                   equal_to(f'${format_two_digits_after_comma(minimal_balance)}'),
+        balance_value = account_page.get_accounts_overview_balance(format_two_digits_after_comma(minimal_balance))
+        check_that(balance_value().text, equal_to(f'${format_two_digits_after_comma(minimal_balance)}'),
                    f'${minimal_balance} is the balance on the second account')
 
 
