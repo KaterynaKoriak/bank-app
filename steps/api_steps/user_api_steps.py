@@ -2,6 +2,7 @@ import allure
 from addict import Dict
 from hamcrest import equal_to
 from requests import Response
+from core.testlib.helpers.api_helpers import get_text_from_json
 from constants.variables import DEFAULT_BALANCE
 from core.apps.backend.ui_api import ui_api
 
@@ -38,6 +39,10 @@ class UserApiSteps:
     @allure.step('Initialize DB')
     def initialize_db(self):
         return user_account_api.initialize_database()
+
+    @allure.step("Get account balance")
+    def get_account_balance(self, account_id: int):
+        return get_text_from_json(user_account_api.get_account_info(account_id))["balance"]
 
 
 user_api_steps = UserApiSteps()
