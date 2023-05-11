@@ -1,11 +1,11 @@
 import allure
-from hamcrest import equal_to, is_in
+from hamcrest import equal_to
+
 from core.testlib.matchers import check_that
 from core.apps.frontend.pages.account_page import account_page
 from core.testlib.helpers.api_helpers import format_two_digits_after_comma
 from constants.variables import test_messages
 from core.apps.backend.user_api import user_account_api
-from core.testlib.helpers.api_helpers import get_text_from_json
 
 
 class AccountPageSteps:
@@ -27,27 +27,18 @@ class AccountPageSteps:
     def navigate_to_transfer_funds(self) -> None:
         account_page.click_transfer_funds()
 
-    @allure.step('Enter transfer amount')
-    def input_transfer_amount(self, transfer) -> None:
-        account_page.fill_transfer_amount_input(transfer)
-
     @allure.step("Get list of customer's account with API")
     def get_list_of_customer_accounts(self, customer_id):
-        accounts = get_text_from_json(user_account_api.get_customer_accounts(customer_id))
+        accounts = user_account_api.get_customer_accounts(customer_id).json()
         return [account["id"] for account in accounts]
 
-    @allure.step('Select "From account"')
-    def select_from_account(self, account_id) -> None:
+    @allure.step('Transfer money')
+    def transfer_money(self, transfer, from_account_id, to_account_id) -> None:
+        account_page.fill_transfer_amount_input(transfer)
         account_page.click_from_account_dropdown()
-        account_page.select_from_account(account_id)
-
-    @allure.step('Select "To account"')
-    def select_to_account(self, account_id) -> None:
+        account_page.select_from_account(from_account_id, account_page.from_account_dropdown_items)
         account_page.click_to_account_dropdown()
-        account_page.select_to_account(account_id)
-
-    @allure.step('Click "Transfer" button')
-    def transfer_money(self) -> None:
+        account_page.select_to_account(to_account_id, account_page.to_account_dropdown_items)
         account_page.click_transfer_button()
 
 
@@ -104,22 +95,21 @@ class AccountPageAssertSteps:
 
     @allure.step('Check that account numbers in the dropdown belong to the User')
     def check_customers_accounts(self, account_id_list):
-        for account_id in account_id_list:
-            check_that(int(account_page.get_from_account_dropdown_options(account_id)().text),
-                       is_in(account_id_list),
-                       f'{account_id} account id from dropdown belongs to the User')
+        check_that(len(account_page.from_account_dropdown_items), equal_to(len(account_id_list)),
+                   f'there are {len(account_page.from_account_dropdown_items)} accounts in dropdown that belong to the User')
 
     @allure.step('Check the title "Transfer Complete!" is displayed')
     def check_transfer_complete_title(self, title):
         check_that(lambda: account_page.page_title().text, equal_to(title), "the title is 'Transfer Complete!'")
 
     @allure.step('Check the balance after transaction')
-    def check_account_balance_after_transaction(self, after_transaction_balance, account):
+    def check_account_balance_after_transaction(self, after_transaction_balance, **kwargs):
         balance_value = account_page.get_accounts_overview_balance(
             format_two_digits_after_comma(after_transaction_balance))
-        check_that(lambda: balance_value().text,
-                   equal_to(f'${format_two_digits_after_comma(after_transaction_balance)}'),
-                   f'${after_transaction_balance} is the balance on the {account} account')
+        for key in kwargs.keys():
+            check_that(lambda: balance_value().text,
+                       equal_to(f'${format_two_digits_after_comma(after_transaction_balance)}'),
+                       f'${after_transaction_balance} is the balance on the {kwargs[key]} account')
 
 
 account_page_assert_steps = AccountPageAssertSteps()

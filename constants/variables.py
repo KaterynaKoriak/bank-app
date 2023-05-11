@@ -15,3 +15,9 @@ test_messages = {'open_account_title': 'ParaBank | Open Account',
                                            'of opening. Please choose an existing account to transfer funds into '
                                            'the new account.'
                  }
+
+account_types = {
+    'CHECKING': 0,
+    'SAVINGS': 1,
+    'LOAN': 2
+}
