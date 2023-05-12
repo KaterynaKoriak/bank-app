@@ -7,9 +7,17 @@ TEST_INITIAL_BALANCE = 1500.00
 TEST_MIN_BALANCE = 150.00
 BASIC_PASSWORD = "password"
 
-test_messages = {'open_account_title': "ParaBank | Open Account",
-                 'account_opened': "Account Opened!",
+test_messages = {'open_account_title': 'ParaBank | Open Account',
+                 'transfer_funds_title': 'ParaBank | Transfer Funds',
+                 'transfer_complete_title': 'Transfer Complete!',
+                 'account_opened': 'Account Opened!',
                  'minimal_amount_message': 'A minimum of ${:.2f} must be deposited into this account at time '
                                            'of opening. Please choose an existing account to transfer funds into '
                                            'the new account.'
                  }
+
+account_types = {
+    'CHECKING': 0,
+    'SAVINGS': 1,
+    'LOAN': 2
+}

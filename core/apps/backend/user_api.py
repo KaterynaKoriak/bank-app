@@ -15,6 +15,13 @@ class UserAccountApi(BaseApi):
         }
         return self.api_get(f'/customers/{customer_id}/accounts', params=params)
 
+    @allure.step("Get account info")
+    def get_account_info(self, account_id: int) -> Response:
+        params = {
+            'accountId': account_id
+        }
+        return self.api_get(f'/accounts/{account_id}', params=params)
+
     @allure.step("Post customer's updated data")
     def update_user_info(self, customer_id: int, user_data: Dict) -> Response:
         params = {
@@ -40,12 +47,12 @@ class UserAccountApi(BaseApi):
 
     @allure.step("Create account for existing customer")
     def post_account(self, customer_id: int, new_account_type: str, from_account_id: int) -> Response:
-        data = {
+        params = {
             'customerId': customer_id,
             'newAccountType': new_account_type,
             'fromAccountId': from_account_id
         }
-        return self.api_post('/createAccount', json=data)
+        return self.api_post('/createAccount', params=params)
 
     @allure.step("Log in")
     def log_in(self, username: str, password: str) -> Response:

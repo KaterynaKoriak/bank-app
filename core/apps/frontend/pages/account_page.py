@@ -1,35 +1,46 @@
 import allure
-from selene import by
+from selene import by, query
 from selene.support.shared import browser
 
 from core.apps.frontend.pages.base_page import BasePage
 
 
 class AccountPage(BasePage):
-    @staticmethod
-    def get_accounts_overview_balance(text):
-        return browser.element(by.xpath(f'//table/tbody/tr/td[count(//table/thead/tr/th[.="Balance*"]'
-                                        f'/preceding-sibling::th)+1][text()="${text}"]'))
-
-    @staticmethod
-    def get_accounts_overview_available_amount(text):
-        return browser.element(by.xpath(f'//table/tbody/tr/td[count(//table/thead/tr/th[.="Available Amount"]'
-                                        f'/preceding-sibling::th)+1][text()="${text}"]'))
 
     accounts_overview_link = browser.element(by.xpath("//a[contains(@href, '/parabank/overview.htm')]"))
     accounts_overview_total = browser.element(by.xpath("//b[@class='ng-binding']"))
-    accounts_overview_title = browser.element(by.xpath("/html/head/title"))
+    page_meta_title = browser.element(by.xpath("/html/head/title"))
     minimal_amount_message = browser.element(by.xpath("//select[@id='type']/following-sibling::p/b"))
     open_new_account = browser.element(by.xpath("//a[contains(@href, '/parabank/openaccount.htm')]"))
-    account_opened_title = browser.element(by.xpath("//h1[@class='title']"))
-    account_type_dropdown = browser.element(by.xpath("//*[@id='type']"))
-    savings_option = browser.element(by.xpath("//*[@id='type']/option[text()='SAVINGS']"))
-    open_new_account_button = browser.element(by.xpath("//*[@value='Open New Account']"))
+    page_title = browser.element(by.xpath("//h1[@class='title']"))
+    account_type_dropdown = browser.element(by.xpath("//select[@id='type']"))
+    savings_option = browser.element(by.xpath("//select[@id='type']/option[text()='SAVINGS']"))
+    open_new_account_button = browser.element(by.xpath("//input[@value='Open New Account']"))
     first_name_input = browser.element(by.name("initialBalance"))
     submit_button = browser.element(by.xpath("//input[@value='Submit']"))
     login_username_input = browser.element(by.name("username"))
     login_password_input = browser.element(by.name("password"))
     login_button = browser.element(by.xpath("//input[@value='Log In']"))
+    transfer_funds_option = browser.element(by.xpath("//li/a[text() = 'Transfer Funds']"))
+    transfer_amount_input = browser.element(by.xpath("//input[@id='amount']"))
+    from_account_dropdown = browser.element(by.xpath("//select[@id='fromAccountId']"))
+    to_account_dropdown = browser.element(by.xpath("//select[@id='toAccountId']"))
+    transfer_button = browser.element(by.xpath("//input[@value='Transfer']"))
+    from_account_dropdown_items = browser.elements(by.xpath(f"//select[@id='fromAccountId']/option"))
+    to_account_dropdown_items = browser.elements(by.xpath(f"//select[@id='toAccountId']/option"))
+
+    @staticmethod
+    def get_accounts_overview_balance(text):
+        return browser.element(by.xpath(f'//td[count(//th[.="Balance*"]/preceding-sibling::th)+1][text()="${text}"]'))
+
+    @staticmethod
+    def get_accounts_overview_available_amount(text):
+        return browser.element(by.xpath(f'//td[count(//th[.="Available Amount"]'
+                                        f'/preceding-sibling::th)+1][text()="${text}"]'))
+
+    @staticmethod
+    def get_dropdown_item(account_id, dropdown):
+        return next(item for item in dropdown if item.get(query.text) == str(account_id))
 
     @allure.step('Click "Open New Account" option on the navigation panel')
     def click_open_new_account_link(self):
@@ -62,6 +73,34 @@ class AccountPage(BasePage):
     @allure.step('Click on "Log in" button')
     def click_login_button(self):
         self.login_button.click()
+
+    @allure.step('Click the "Transfer Funds" option on the left navigation panel')
+    def click_transfer_funds(self):
+        self.transfer_funds_option.click()
+
+    @allure.step('Enter the amount to be transferred')
+    def fill_transfer_amount_input(self, text: str):
+        self.transfer_amount_input.send_keys(text)
+
+    @allure.step('Click "From account #" dropdown')
+    def click_from_account_dropdown(self):
+        self.from_account_dropdown.click()
+
+    @allure.step('Select "From account #" dropdown option')
+    def select_from_account(self, account_id, dropdown_items):
+        self.get_dropdown_item(account_id, dropdown_items).click()
+
+    @allure.step('Click "to account #" dropdown')
+    def click_to_account_dropdown(self):
+        self.to_account_dropdown.click()
+
+    @allure.step('Select "to account #" dropdown option')
+    def select_to_account(self, account_id, dropdown_items):
+        self.get_dropdown_item(account_id, dropdown_items).click()
+
+    @allure.step('Click "Transfer" button')
+    def click_transfer_button(self):
+        self.transfer_button.click()
 
 
 account_page = AccountPage()
