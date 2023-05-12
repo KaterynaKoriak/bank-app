@@ -103,13 +103,12 @@ class AccountPageAssertSteps:
         check_that(lambda: account_page.page_title().text, equal_to(title), "the title is 'Transfer Complete!'")
 
     @allure.step('Check the balance after transaction')
-    def check_account_balance_after_transaction(self, after_transaction_balance, **kwargs):
+    def check_account_balance_after_transaction(self, after_transaction_balance, allure_account_number):
         balance_value = account_page.get_accounts_overview_balance(
             format_two_digits_after_comma(after_transaction_balance))
-        for key in kwargs.keys():
-            check_that(lambda: balance_value().text,
-                       equal_to(f'${format_two_digits_after_comma(after_transaction_balance)}'),
-                       f'${after_transaction_balance} is the balance on the {kwargs[key]} account')
+        check_that(lambda: balance_value().text,
+                   equal_to(f'${format_two_digits_after_comma(after_transaction_balance)}'),
+                   f'${after_transaction_balance} is the balance on the {allure_account_number} account')
 
 
 account_page_assert_steps = AccountPageAssertSteps()

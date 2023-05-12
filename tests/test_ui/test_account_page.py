@@ -61,7 +61,6 @@ def test_transfer_money_between_accounts(register_user, login, user_scenario, tr
     new_account_balance_after_transaction = new_account_initial_balance + transfer_amount
 
     account_page_assert_steps.check_account_balance_after_transaction(first_account_balance_after_transaction,
-                                                                      allure_first_account="first")
+                                                                      allure_account_number="first")
     account_page_assert_steps.check_account_balance_after_transaction(new_account_balance_after_transaction,
-                                                                      allure_new_account="new")
-
+                                                                      allure_account_number="new")
