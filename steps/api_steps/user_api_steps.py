@@ -39,10 +39,6 @@ class UserApiSteps:
     def initialize_db(self):
         return user_account_api.initialize_database()
 
-    @allure.step("Get account balance")
-    def get_account_balance(self, account_id: int):
-        return user_account_api.get_account_info(account_id).json()["balance"]
-
 
 user_api_steps = UserApiSteps()
 
@@ -70,7 +66,7 @@ class UserApiAssertSteps:
     @allure.step("Check that user has account after creation upon API")
     def check_new_users_account(self, customer_id: int) -> None:
         customer_api = user_api_steps.get_customer_accounts_info(customer_id).json()
-        check_that(customer_api[0].get('balance'), equal_to(DEFAULT_BALANCE),
+        check_that(lambda: customer_api[0].get('balance'), equal_to(DEFAULT_BALANCE),
                    f'Customer has {DEFAULT_BALANCE} on his account')
         check_that(len(customer_api), equal_to(1), 'Customer has only one account')
 

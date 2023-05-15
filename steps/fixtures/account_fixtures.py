@@ -9,7 +9,8 @@ from core.apps.frontend.pages.account_page import account_page
 @pytest.fixture(scope='function')
 def register_user(user_scenario):
     ui_api.get_registration()
-    ui_api.post_registration(user_scenario)
+    for user in user_scenario:
+        ui_api.post_registration(user)
 
 
 @pytest.fixture(scope='function')
@@ -22,6 +23,6 @@ def edit_default_admin_values():
 
 @pytest.fixture(scope='function')
 def login(user_scenario):
-    account_page.fill_login_username_input(user_scenario.customer.username)
+    account_page.fill_login_username_input(user_scenario[0].customer.username)
     account_page.fill_login_password_input(BASIC_PASSWORD)
     account_page.click_login_button()

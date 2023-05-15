@@ -1,5 +1,6 @@
 import allure
 from hamcrest import equal_to
+from selene import query
 
 from core.testlib.matchers import check_that
 from core.apps.frontend.pages.account_page import account_page
@@ -40,6 +41,25 @@ class AccountPageSteps:
         account_page.click_to_account_dropdown()
         account_page.select_to_account(to_account_id, account_page.to_account_dropdown_items)
         account_page.click_transfer_button()
+
+    @allure.step('Open Bill Pay screen')
+    def navigate_to_bill_pay_screen(self):
+        account_page.click_bill_pay_option()
+
+    @allure.step('Enter payee information and send the form')
+    def send_bill_payment(self, userdata, to_account_id, from_account_id, payment_amount):
+        account_page.fill_payee_name_input(f'{userdata.customer.firstName} {userdata.customer.lastName}')
+        account_page.fill_address_input(userdata.customer.address.street)
+        account_page.fill_city_input(userdata.customer.address.city)
+        account_page.fill_state_input(userdata.customer.address.state)
+        account_page.fill_zip_code_input(userdata.customer.address.zipCode)
+        account_page.fill_phone_input(userdata.customer.phoneNumber)
+        account_page.fill_account_input(to_account_id)
+        account_page.fill_verify_account_input(to_account_id)
+        account_page.fill_amount_input(payment_amount)
+        account_page.click_from_account_dropdown_bill()
+        account_page.select_from_account(from_account_id, account_page.from_account_id_dropdown_options)
+        account_page.click_send_payment()
 
 
 account_page_steps = AccountPageSteps()
@@ -100,7 +120,7 @@ class AccountPageAssertSteps:
 
     @allure.step('Check the title "Transfer Complete!" is displayed')
     def check_transfer_complete_title(self, title):
-        check_that(lambda: account_page.page_title().text, equal_to(title), "the title is 'Transfer Complete!'")
+        check_that(lambda: account_page.page_title().text, equal_to(title), f"the title is '{title}'")
 
     @allure.step('Check the balance after transaction')
     def check_account_balance_after_transaction(self, after_transaction_balance, allure_account_number):
@@ -109,6 +129,11 @@ class AccountPageAssertSteps:
         check_that(lambda: balance_value().text,
                    equal_to(f'${format_two_digits_after_comma(after_transaction_balance)}'),
                    f'${after_transaction_balance} is the balance on the {allure_account_number} account')
+
+    @allure.step('Check the title "Bill Payment Complete!" is displayed')
+    def check_bill_payment_complete_title(self, title):
+        check_that(lambda: account_page.payment_complete_title.get(query.text), equal_to(title),
+                   f"the title is '{title}'")
 
 
 account_page_assert_steps = AccountPageAssertSteps()
