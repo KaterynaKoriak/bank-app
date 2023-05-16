@@ -5,8 +5,11 @@ from config.env import API_URL
 from core.apps.backend.base_api import BaseApi
 
 
-class UserAccountApi(BaseApi):
+class WebApi(BaseApi):
     api_url = API_URL
+
+
+class UserAccountApi(WebApi):
 
     @allure.step("Get customer's accounts info")
     def get_customer_accounts(self, customer_id: int) -> Response:

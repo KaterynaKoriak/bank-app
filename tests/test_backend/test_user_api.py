@@ -8,7 +8,6 @@ from constants.variables import INITIALIZED_DB_SECOND_CUSTOMER_ID, FIRST_REGISTE
 @allure.description('RGA-1')
 @allure.title("Register customer via API")
 @allure.tag('Account API')
-@pytest.mark.parametrize('user_scenario', [1], indirect=True)
 def test_register_user(user_scenario):
     user_scenario = user_scenario[0]
     user_api_steps.register_user(user_scenario)
@@ -20,7 +19,6 @@ def test_register_user(user_scenario):
 @allure.description('RGA-2')
 @allure.title("Edit User's data via API")
 @allure.tag('Account API')
-@pytest.mark.parametrize('user_scenario', [1], indirect=True)
 def test_update_user_info(user_scenario):
     user_scenario = user_scenario[0]
     user_api_steps.update_customer_info(INITIALIZED_DB_SECOND_CUSTOMER_ID,
@@ -32,7 +30,6 @@ def test_update_user_info(user_scenario):
 @allure.description('RGA-3')
 @allure.title("New user has an account after creation")
 @allure.tag('Account API')
-@pytest.mark.parametrize('user_scenario', [1], indirect=True)
 def test_get_customer_accounts_info(user_scenario):
     user_scenario = user_scenario[0]
     user_api_steps.register_user(user_scenario)

@@ -36,7 +36,7 @@ def clean_initialize_db():
     user_account_api.initialize_database()
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope='function', params=[1])
 def user_scenario(request):
     number = request.param
     scenarios = []

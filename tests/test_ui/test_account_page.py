@@ -1,9 +1,9 @@
 import allure
 import pytest
 
-from steps.api_steps.account_api_steps import account_api_steps
+from steps.api_steps.account_api_steps import account_api_steps, account_api_assert_steps
 from steps.ui_steps.account_page_steps import account_page_steps, account_page_assert_steps
-from constants.variables import TEST_INITIAL_BALANCE, DEFAULT_MIN_BALANCE, DEFAULT_BALANCE, CUSTOMER_ID_STEP_DB,\
+from constants.variables import TEST_INITIAL_BALANCE, DEFAULT_MIN_BALANCE, DEFAULT_BALANCE, CUSTOMER_ID_STEP_DB, \
     FIRST_REGISTERED_CUSTOMER_ID
 from constants.variables import test_messages, account_types
 from steps.api_steps.user_api_steps import user_api_steps
@@ -13,7 +13,6 @@ from steps.api_steps.user_api_steps import user_api_steps
 @allure.title('Associated with the user account is created')
 @allure.tag('Account Page')
 @pytest.mark.usefixtures('driver')
-@pytest.mark.parametrize('user_scenario', [1], indirect=True)
 def test_account_creation(edit_default_admin_values, register_user, login, user_scenario):
     account_page_steps.navigate_to_accounts_overview()
     account_page_assert_steps.check_balance(TEST_INITIAL_BALANCE)
@@ -25,7 +24,6 @@ def test_account_creation(edit_default_admin_values, register_user, login, user_
 @allure.title('Additional account can be created for User')
 @allure.tag('Account Page')
 @pytest.mark.usefixtures('driver')
-@pytest.mark.parametrize('user_scenario', [1], indirect=True)
 def test_additional_account_creation(register_user, login, user_scenario):
     account_page_steps.navigate_to_open_new_account()
     account_page_assert_steps.check_page_navigation(test_messages["open_account_title"])
@@ -41,7 +39,6 @@ def test_additional_account_creation(register_user, login, user_scenario):
 @allure.title('User can transfer money between accounts')
 @allure.tag('Account Page')
 @pytest.mark.usefixtures('driver')
-@pytest.mark.parametrize('user_scenario', [1], indirect=True)
 @pytest.mark.parametrize('transfer_amount', [10, 0, -10, 100.5])
 def test_transfer_money_between_accounts(register_user, login, user_scenario, transfer_amount):
     from_account_id = user_api_steps.get_customer_accounts_info(FIRST_REGISTERED_CUSTOMER_ID).json()[0]["id"]
@@ -95,3 +92,7 @@ def test_bill_pay_ui(register_user, login, user_scenario, payment_amount):
     account_page_steps.navigate_to_accounts_overview()
     account_page_assert_steps.check_account_balance_after_transaction(balance_after_transaction,
                                                                       allure_account_number='first')
+    account_api_assert_steps.check_account_balance_after_transaction(first_customer_account_id,
+                                                                     balance_after_transaction,
+                                                                     allure_account_number='first')
+

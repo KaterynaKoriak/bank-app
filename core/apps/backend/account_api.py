@@ -1,12 +1,10 @@
 import allure
 from requests import Response
 
-from config.env import API_URL
-from core.apps.backend.base_api import BaseApi
+from core.apps.backend.user_api import WebApi
 
 
-class AccountApi(BaseApi):
-    api_url = API_URL
+class AccountApi(WebApi):
 
     @allure.step("Pay bill")
     def post_bill_payment(self, userdata, amount: int, to_account_id: str, from_account_id: int) -> Response:
