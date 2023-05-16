@@ -29,6 +29,21 @@ class AccountPage(BasePage):
     from_account_dropdown_items = browser.elements(by.xpath(f"//select[@id='fromAccountId']/option"))
     to_account_dropdown_items = browser.elements(by.xpath(f"//select[@id='toAccountId']/option"))
 
+    bill_pay_option = browser.element(by.xpath("//a[text()='Bill Pay']"))
+    payee_name_input = browser.element(by.xpath("//input[@ng-model='payee.name']"))
+    address_input = browser.element(by.xpath("//input[@ng-model='payee.address.street']"))
+    city_input = browser.element(by.xpath("//input[@ng-model='payee.address.city']"))
+    state_input = browser.element(by.xpath("//input[@ng-model='payee.address.state']"))
+    zip_code_input = browser.element(by.xpath("//input[@ng-model='payee.address.zipCode']"))
+    phone_input = browser.element(by.xpath("//input[@ng-model='payee.phoneNumber']"))
+    account_input = browser.element(by.xpath("//input[@ng-model='payee.accountNumber']"))
+    verify_account_input = browser.element(by.xpath("//input[@ng-model='verifyAccount']"))
+    amount_input = browser.element(by.xpath("//input[@ng-model='amount']"))
+    from_account_id_dropdown = browser.element(by.xpath("//select[@name='fromAccountId']"))
+    from_account_id_dropdown_options = browser.elements(by.xpath("//select[@name='fromAccountId']/option"))
+    send_payment_button = browser.element(by.xpath("//input[@value='Send Payment']"))
+    payment_complete_title = browser.element(by.xpath("//div[@ng-show='showResult']/h1[@class='title']"))
+
     @staticmethod
     def get_accounts_overview_balance(text):
         return browser.element(by.xpath(f'//td[count(//th[.="Balance*"]/preceding-sibling::th)+1][text()="${text}"]'))
@@ -101,6 +116,53 @@ class AccountPage(BasePage):
     @allure.step('Click "Transfer" button')
     def click_transfer_button(self):
         self.transfer_button.click()
+
+    def click_bill_pay_option(self):
+        self.bill_pay_option.click()
+
+    @allure.step('Enter Payee Name')
+    def fill_payee_name_input(self, text: str):
+        self.payee_name_input.send_keys(text)
+
+    @allure.step('Enter Address')
+    def fill_address_input(self, text: str):
+        self.address_input.send_keys(text)
+
+    @allure.step('Enter City')
+    def fill_city_input(self, text: str):
+        self.city_input.send_keys(text)
+
+    @allure.step('Enter State')
+    def fill_state_input(self, text: str):
+        self.state_input.send_keys(text)
+
+    @allure.step('Enter zip code')
+    def fill_zip_code_input(self, text: str):
+        self.zip_code_input.send_keys(text)
+
+    @allure.step('Enter Phone')
+    def fill_phone_input(self, text: str):
+        self.phone_input.send_keys(text)
+
+    @allure.step('Enter Account')
+    def fill_account_input(self, text: str):
+        self.account_input.send_keys(text)
+
+    @allure.step('Enter Verify Account')
+    def fill_verify_account_input(self, text: str):
+        self.verify_account_input.send_keys(text)
+
+    @allure.step('Enter Amount')
+    def fill_amount_input(self, text: str):
+        self.amount_input.send_keys(text)
+
+    @allure.step('Click "From account #" dropdown')
+    def click_from_account_dropdown_bill(self):
+        self.from_account_id_dropdown.click()
+
+    @allure.step('Click "Send Payment" button')
+    def click_send_payment(self):
+        self.send_payment_button.click()
 
 
 account_page = AccountPage()

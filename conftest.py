@@ -11,7 +11,6 @@ from core.testlib.utils import get_random_last_name, get_random_first_name, get_
 from core.apps.backend.user_api import user_account_api
 from constants.variables import BASIC_PASSWORD
 
-
 pytest_plugins = [
     'steps.fixtures.account_fixtures'
 ]
@@ -37,18 +36,23 @@ def clean_initialize_db():
     user_account_api.initialize_database()
 
 
-@pytest.fixture(scope='function')
-def user_scenario():
-    return Dict(repeatedPassword=BASIC_PASSWORD,
-                customer=(Dict(firstName=get_random_first_name(),
-                               lastName=get_random_last_name(), address=Dict(
-                        street=get_random_street(), city=get_random_city(),
-                        state=get_random_state(),
-                        zipCode=get_random_zip_code()),
-                               phoneNumber=get_random_phone_number(),
-                               ssn=get_random_ssn(),
-                               username=get_random_str(),
-                               password=BASIC_PASSWORD)))
+@pytest.fixture(scope='function', params=[1])
+def user_scenario(request):
+    number = request.param
+    scenarios = []
+    for i in range(number):
+        scenario = Dict(repeatedPassword=BASIC_PASSWORD,
+                        customer=(Dict(firstName=get_random_first_name(),
+                                       lastName=get_random_last_name(), address=Dict(
+                                street=get_random_street(), city=get_random_city(),
+                                state=get_random_state(),
+                                zipCode=get_random_zip_code()),
+                                       phoneNumber=get_random_phone_number(),
+                                       ssn=get_random_ssn(),
+                                       username=get_random_str(),
+                                       password=BASIC_PASSWORD)))
+        scenarios.append(scenario)
+    return scenarios
 
 
 def pytest_exception_interact(node, call, report):

@@ -5,8 +5,11 @@ from config.env import API_URL
 from core.apps.backend.base_api import BaseApi
 
 
-class UserAccountApi(BaseApi):
+class WebApi(BaseApi):
     api_url = API_URL
+
+
+class UserAccountApi(WebApi):
 
     @allure.step("Get customer's accounts info")
     def get_customer_accounts(self, customer_id: int) -> Response:
@@ -14,13 +17,6 @@ class UserAccountApi(BaseApi):
             'customerId': customer_id
         }
         return self.api_get(f'/customers/{customer_id}/accounts', params=params)
-
-    @allure.step("Get account info")
-    def get_account_info(self, account_id: int) -> Response:
-        params = {
-            'accountId': account_id
-        }
-        return self.api_get(f'/accounts/{account_id}', params=params)
 
     @allure.step("Post customer's updated data")
     def update_user_info(self, customer_id: int, user_data: Dict) -> Response:
@@ -66,6 +62,25 @@ class UserAccountApi(BaseApi):
     def initialize_database(self):
         return self.api_post('/initializeDB')
 
+    @allure.step("Pay bill")
+    def post_bill_payment(self, userdata, amount: int, to_account_id: str, from_account_id: int) -> Response:
+        data = {
+            "name": f'{userdata.customer.firstName} {userdata.customer.lastName}',
+            "address": {
+                "street": userdata.customer.address.street,
+                "city": userdata.customer.address.city,
+                "state": userdata.customer.address.state,
+                "zipCode": userdata.customer.address.zipCode
+            },
+            "phoneNumber": userdata.customer.phoneNumber,
+            "accountNumber": from_account_id
+        }
+
+        params = {
+            'accountId': to_account_id,
+            'amount': amount
+        }
+        return self.api_post('/billpay', json=data, params=params)
+
 
 user_account_api = UserAccountApi()
-
