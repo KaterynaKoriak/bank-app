@@ -1,6 +1,7 @@
 import allure
 import pytest
 
+from core.apps.frontend.pages.account_page import account_page
 from steps.api_steps.account_api_steps import account_api_steps, account_api_assert_steps
 from steps.ui_steps.account_page_steps import account_page_steps, account_page_assert_steps
 from constants.variables import TEST_INITIAL_BALANCE, DEFAULT_MIN_BALANCE, DEFAULT_BALANCE, CUSTOMER_ID_STEP_DB, \
@@ -96,3 +97,19 @@ def test_bill_pay_ui(register_user, login, user_scenario, payment_amount):
                                                                      balance_after_transaction,
                                                                      allure_account_number='first')
 
+
+@allure.description('ACU-5')
+@allure.title('Request a loan')
+@allure.tag('Account Page')
+@pytest.mark.usefixtures('driver')
+def test_loan_request(register_user, login, user_scenario):
+    from_account_id = user_api_steps.get_customer_accounts_info(FIRST_REGISTERED_CUSTOMER_ID).json()[0]["id"]
+    account_page_steps.navigate_to_request_loan()
+    account_page_steps.fill_request_loan_form(100, 20, from_account_id)
+    account_page_assert_steps.check_loan_request_confirmation_message()
+    account_page_assert_steps.check_loan_provider()
+    account_page_assert_steps.check_loan_status()
+    account_page_assert_steps.check_loan_date()
+    new_account = account_page.new_account_number().text
+    account_page_steps.navigate_to_accounts_overview()
+    account_page_assert_steps.check_account_is_created(new_account)

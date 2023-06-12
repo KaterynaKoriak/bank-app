@@ -15,6 +15,10 @@ class AccountApiSteps:
     def get_account_balance(self, account_id: int):
         return account_api.get_account_info(account_id).json()["balance"]
 
+    @allure.step("Transfer money")
+    def transfer_money_api(self, from_account_id: int, to_account_id: int, amount: int):
+        return account_api.post_transfer(from_account_id, to_account_id, amount)
+
 
 account_api_steps = AccountApiSteps()
 

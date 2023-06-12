@@ -43,6 +43,15 @@ class AccountPage(BasePage):
     from_account_id_dropdown_options = browser.elements(by.xpath("//select[@name='fromAccountId']/option"))
     send_payment_button = browser.element(by.xpath("//input[@value='Send Payment']"))
     payment_complete_title = browser.element(by.xpath("//div[@ng-show='showResult']/h1[@class='title']"))
+    request_loan_option = browser.element(by.xpath("//a[@href='/parabank/requestloan.htm']"))
+    loan_amount_input = browser.element(by.xpath("//input[@id='amount']"))
+    down_payment_input = browser.element(by.xpath("//input[@id='downPayment']"))
+    apply_now_button = browser.element(by.xpath("//input[@value='Apply Now']"))
+    loan_request_confirmation_message = browser.element(by.xpath("//p[contains(text(), 'Congratulations')]"))
+    loan_provider = browser.element(by.xpath("//td[@id='loanProviderName']"))
+    loan_date = browser.element(by.xpath("//td[@id='responseDate']"))
+    loan_status = browser.element(by.xpath("//td[@id='loanStatus']"))
+    new_account_number = browser.element(by.xpath("//a[@id='newAccountId']"))
 
     @staticmethod
     def get_accounts_overview_balance(text):
@@ -52,6 +61,10 @@ class AccountPage(BasePage):
     def get_accounts_overview_available_amount(text):
         return browser.element(by.xpath(f'//td[count(//th[.="Available Amount"]'
                                         f'/preceding-sibling::th)+1][text()="${text}"]'))
+
+    @staticmethod
+    def get_accounts_overview_account(text):
+        return browser.element(by.xpath(f'//td/a[count(//th[.="Account"]/preceding-sibling::th)+1][text()="{text}"]'))
 
     @staticmethod
     def get_dropdown_item(account_id, dropdown):
@@ -163,6 +176,22 @@ class AccountPage(BasePage):
     @allure.step('Click "Send Payment" button')
     def click_send_payment(self):
         self.send_payment_button.click()
+
+    @allure.step('Click "Request Loan" option')
+    def click_request_loan_option(self):
+        self.request_loan_option.click()
+
+    @allure.step('Enter Loan Amount')
+    def fill_loan_amount_input(self, amount):
+        self.loan_amount_input.send_keys(amount)
+
+    @allure.step('Enter Down Payment')
+    def fill_down_payment_input(self, amount):
+        self.down_payment_input.send_keys(amount)
+
+    @allure.step('Click "Apply now" button')
+    def click_apply_now(self):
+        self.apply_now_button.click()
 
 
 account_page = AccountPage()
