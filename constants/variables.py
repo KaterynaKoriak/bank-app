@@ -16,7 +16,11 @@ test_messages = {'open_account_title': 'ParaBank | Open Account',
                  'bill_payment_complete': 'Bill Payment Complete',
                  'minimal_amount_message': 'A minimum of ${:.2f} must be deposited into this account at time '
                                            'of opening. Please choose an existing account to transfer funds into '
-                                           'the new account.'
+                                           'the new account.',
+                 'loan_confirmation_message': 'Congratulations, your loan has been approved.',
+                 'loan_provider': 'Wealth Securities Dynamic Loans (WSDL)',
+                 'transfer_received_message': 'Funds Transfer Received',
+                 'transfer_sent_message': 'Funds Transfer Sent'
                  }
 
 account_types = {

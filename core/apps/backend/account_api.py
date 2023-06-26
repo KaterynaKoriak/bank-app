@@ -33,5 +33,14 @@ class AccountApi(WebApi):
         }
         return self.api_get(f'/accounts/{account_id}', params=params)
 
+    @allure.step("Transfer money between user's accounts")
+    def post_transfer(self, from_account_id: int, to_account_id: int, amount: int):
+        params = {
+            'fromAccountId': from_account_id,
+            'toAccountId': to_account_id,
+            'amount': amount
+        }
+        return self.api_post('/transfer', params=params)
+
 
 account_api = AccountApi()
