@@ -1,6 +1,3 @@
-import datetime
-import time
-
 import allure
 from hamcrest import equal_to
 from selene import query
@@ -63,17 +60,6 @@ class AccountPageSteps:
         account_page.click_from_account_dropdown_bill()
         account_page.select_from_account(from_account_id, account_page.from_account_id_dropdown_options)
         account_page.click_send_payment()
-
-    @allure.step('Navigate to the Open New Account page')
-    def navigate_to_request_loan(self) -> None:
-        account_page.click_request_loan_option()
-
-    @allure.step('Apply for a loan')
-    def fill_request_loan_form(self, loan_amount, down_amount, from_account_id):
-        account_page.fill_loan_amount_input(loan_amount)
-        account_page.fill_down_payment_input(down_amount)
-        account_page.select_from_account(from_account_id, account_page.from_account_dropdown_items)
-        account_page.click_apply_now()
 
 
 account_page_steps = AccountPageSteps()
@@ -148,82 +134,6 @@ class AccountPageAssertSteps:
     def check_bill_payment_complete_title(self, title):
         check_that(lambda: account_page.payment_complete_title.get(query.text), equal_to(title),
                    f"the title is '{title}'")
-
-    @allure.step('Check the "Congratulations, your loan has been approved." message is displayed')
-    def check_loan_request_confirmation_message(self):
-        check_that(lambda: account_page.loan_request_confirmation_message().text,
-                   equal_to(test_messages['loan_confirmation_message']),
-                   f"confirmation message is '{test_messages['loan_confirmation_message']}'")
-
-    @allure.step('Check the loan provider')
-    def check_loan_provider(self):
-        check_that(lambda: account_page.loan_provider().text, equal_to(test_messages['loan_provider']),
-                   f"loan provider is '{test_messages['loan_provider']}'")
-
-    @allure.step('Check the loan date')
-    def check_loan_date(self):
-        check_that(account_page.loan_date().text, equal_to(datetime.date.today().strftime("%m-%d-%Y")),
-                   f"loan date is {account_page.loan_date().text}")
-
-    @allure.step('Check the loan status')
-    def check_loan_status(self):
-        check_that(account_page.loan_status().text, equal_to('Approved'), "loan status is 'Approved'")
-
-    @allure.step('The new account is created on the Accounts Overview page')
-    def check_account_is_created(self, new_account):
-        account = account_page.get_accounts_overview_account(new_account)
-        check_that(lambda: account().text, equal_to(new_account), f"new account {new_account} is created")
-
-    @allure.step('Verify account number')
-    def check_account_number(self, account_id):
-        check_that(lambda: int(account_page.account_id.get(query.text)), equal_to(account_id),
-                   f"{account_id} is account id")
-
-    @allure.step('Verify account type')
-    def check_account_type(self, account_type):
-        check_that(lambda: account_page.account_type.get(query.text), equal_to(account_type),
-                   f"{account_type} is account type")
-
-    @allure.step('Verify account balance')
-    def check_account_balance(self, account_balance):
-        check_that(lambda: account_page.account_balance.get(query.text),
-                   equal_to(f"${format_two_digits_after_comma(account_balance)}"),
-                   f"{account_balance} is account balance")
-
-    @allure.step('Verify account available amount')
-    def check_account_available_amount(self, account_available_amount):
-        check_that(lambda: account_page.account_available_amount.get(query.text),
-                   equal_to(f"${format_two_digits_after_comma(account_available_amount)}"),
-                   f"{account_available_amount} is account available amount")
-
-    @allure.step('Verify "All" account activity filters are selected')
-    def check_account_activity_filters(self, selected_option):
-        check_that(account_page.selected_transaction_type.get(query.text), equal_to(selected_option),
-                   f"{selected_option} is selected transaction type")
-        check_that(account_page.selected_accounts_activity_period.get(query.text), equal_to(selected_option),
-                   f"{selected_option} is selected accounts activity period")
-
-    @allure.step('Verify "Account Activity" table details')
-    def check_transaction_info(self, number_of_transaction, transaction_amount, message):
-        time.sleep(0.1)
-        transaction_info = [element.get(query.text) for element in
-                            account_page.get_transaction_info(number_of_transaction)]
-
-        if message == test_messages["transfer_sent_message"]:
-            debit_amount = f'${format_two_digits_after_comma(transaction_amount)}' if transaction_amount >= 0 \
-                else f'-${format_two_digits_after_comma(abs(transaction_amount))}'
-        else:
-            debit_amount = ''
-        if message == test_messages["transfer_received_message"]:
-            credit_amount = f'${format_two_digits_after_comma(transaction_amount)}' if transaction_amount >= 0 \
-                else f'-${format_two_digits_after_comma(abs(transaction_amount))}'
-        else:
-            credit_amount = ''
-        expected_transaction_info = [datetime.date.today().strftime("%m-%d-%Y"), message, debit_amount, credit_amount]
-        check_that(transaction_info, equal_to(expected_transaction_info), f"'Date' is {expected_transaction_info[0]}, "
-                                                                          f"'Transaction' is '{message}', "
-                                                                          f"'Debit(-)' is {debit_amount}, "
-                                                                          f"'Credit(+)' is {credit_amount}")
 
 
 account_page_assert_steps = AccountPageAssertSteps()

@@ -3,33 +3,7 @@ import pytest
 
 from steps.api_steps.account_api_steps import account_api_steps, account_api_assert_steps
 from steps.api_steps.user_api_steps import user_api_steps
-from constants.variables import FIRST_REGISTERED_CUSTOMER_ID, CUSTOMER_ID_STEP_DB, SUCCESS_CODE, account_types
-
-
-@allure.description('ACA-1')
-@allure.title('Send funds via API')
-@allure.tag('Account Page')
-@pytest.mark.parametrize('payment_amount', [10, 100.5, -10, 0])
-def test_send_funds_api(register_user, user_scenario, payment_amount):
-    first_account_id = user_api_steps.get_customer_accounts_info(FIRST_REGISTERED_CUSTOMER_ID).json()[0]["id"]
-    second_account_id = user_api_steps.create_account_for_existing_user(FIRST_REGISTERED_CUSTOMER_ID,
-                                                                        account_types["CHECKING"],
-                                                                        first_account_id).json()["id"]
-
-    initial_first_account_balance = account_api_steps.get_account_balance(first_account_id)
-    initial_second_account_balance = account_api_steps.get_account_balance(second_account_id)
-
-    account_api_steps.transfer_money_api(first_account_id, second_account_id, payment_amount)
-
-    first_account_balance_after_transaction = initial_first_account_balance - payment_amount
-    second_account_balance_after_transaction = initial_second_account_balance + payment_amount
-
-    account_api_assert_steps.check_account_balance_after_transaction(first_account_id,
-                                                                     first_account_balance_after_transaction,
-                                                                     allure_account_number='first')
-    account_api_assert_steps.check_account_balance_after_transaction(second_account_id,
-                                                                     second_account_balance_after_transaction,
-                                                                     allure_account_number='second')
+from constants.variables import FIRST_REGISTERED_CUSTOMER_ID, CUSTOMER_ID_STEP_DB,SUCCESS_CODE
 
 
 @allure.description('ACA-2')

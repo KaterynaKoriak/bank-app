@@ -43,28 +43,6 @@ class AccountPage(BasePage):
     from_account_id_dropdown_options = browser.elements(by.xpath("//select[@name='fromAccountId']/option"))
     send_payment_button = browser.element(by.xpath("//input[@value='Send Payment']"))
     payment_complete_title = browser.element(by.xpath("//div[@ng-show='showResult']/h1[@class='title']"))
-    request_loan_option = browser.element(by.xpath("//a[@href='/parabank/requestloan.htm']"))
-    loan_amount_input = browser.element(by.xpath("//input[@id='amount']"))
-    down_payment_input = browser.element(by.xpath("//input[@id='downPayment']"))
-    apply_now_button = browser.element(by.xpath("//input[@value='Apply Now']"))
-    loan_request_confirmation_message = browser.element(by.xpath("//p[contains(text(), 'Congratulations')]"))
-    loan_provider = browser.element(by.id("loanProviderName"))
-    loan_date = browser.element(by.id("responseDate"))
-    loan_status = browser.element(by.id("loanStatus"))
-    new_account_number = browser.element(by.id("newAccountId"))
-
-    account_id = browser.element(by.id("accountId"))
-    account_type = browser.element(by.id("accountType"))
-    account_balance = browser.element(by.id("balance"))
-    account_available_amount = browser.element(by.id("availableBalance"))
-    selected_transaction_type = browser.element(by.xpath("//select[@id='transactionType']"
-                                                         "/option[@selected='selected']"))
-    selected_accounts_activity_period = browser.element(by.xpath("//select[@id='month']/option[@selected='selected']"))
-
-    @staticmethod
-    def get_transaction_info(number_of_transaction):
-        return browser.elements(by.xpath(f"//tr[@ng-repeat='transaction in transactions']"
-                                         f"[{number_of_transaction}]/td"))
 
     @staticmethod
     def get_accounts_overview_balance(text):
@@ -74,10 +52,6 @@ class AccountPage(BasePage):
     def get_accounts_overview_available_amount(text):
         return browser.element(by.xpath(f'//td[count(//th[.="Available Amount"]'
                                         f'/preceding-sibling::th)+1][text()="${text}"]'))
-
-    @staticmethod
-    def get_accounts_overview_account(text):
-        return browser.element(by.xpath(f'//td/a[count(//th[.="Account"]/preceding-sibling::th)+1][text()="{text}"]'))
 
     @staticmethod
     def get_dropdown_item(account_id, dropdown):
@@ -189,26 +163,6 @@ class AccountPage(BasePage):
     @allure.step('Click "Send Payment" button')
     def click_send_payment(self):
         self.send_payment_button.click()
-
-    @allure.step('Click "Request Loan" option')
-    def click_request_loan_option(self):
-        self.request_loan_option.click()
-
-    @allure.step('Enter Loan Amount')
-    def fill_loan_amount_input(self, amount):
-        self.loan_amount_input.send_keys(amount)
-
-    @allure.step('Enter Down Payment')
-    def fill_down_payment_input(self, amount):
-        self.down_payment_input.send_keys(amount)
-
-    @allure.step('Click "Apply now" button')
-    def click_apply_now(self):
-        self.apply_now_button.click()
-
-    @allure.step('Click account ID')
-    def navigate_to_account_activity(self, account_id):
-        self.get_accounts_overview_account(account_id).click()
 
 
 account_page = AccountPage()
