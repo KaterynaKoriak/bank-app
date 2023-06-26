@@ -113,3 +113,44 @@ def test_loan_request(register_user, login, user_scenario):
     new_account = account_page.new_account_number().text
     account_page_steps.navigate_to_accounts_overview()
     account_page_assert_steps.check_account_is_created(new_account)
+
+
+@allure.description('ADU-1')
+@allure.title('User is able to see account details for each account')
+@allure.tag('Account Page')
+@pytest.mark.usefixtures('driver')
+def test_account_details(register_user, login, user_scenario):
+    first_account_id = user_api_steps.get_customer_accounts_info(FIRST_REGISTERED_CUSTOMER_ID).json()[0]["id"]
+    second_account_id = user_api_steps.create_account_for_existing_user(FIRST_REGISTERED_CUSTOMER_ID,
+                                                                        account_types["CHECKING"],
+                                                                        first_account_id).json()["id"]
+
+    for account_id in [first_account_id, second_account_id]:
+        account_page_steps.navigate_to_accounts_overview()
+        account_page.navigate_to_account_activity(account_id)
+        account_page_assert_steps.check_account_number(account_id)
+        account_details_expected = account_api_steps.get_account_details(account_id)
+        account_page_assert_steps.check_account_type(account_details_expected['type'])
+        account_page_assert_steps.check_account_balance(account_details_expected['balance'])
+
+        available_amount = 0 if account_details_expected['balance'] < 0 else account_details_expected['balance']
+        account_page_assert_steps.check_account_available_amount(available_amount)
+        account_page_assert_steps.check_account_activity_filters('All')
+
+
+@allure.description('ADU-2')
+@allure.title('User is able to see statement for the account')
+@allure.tag('Account Page')
+@pytest.mark.usefixtures('driver')
+@pytest.mark.parametrize('payment_amount', [10, 0, -10, 100.5])
+def test_account_activity(register_user, login, user_scenario, payment_amount):
+    first_account_id = user_api_steps.get_customer_accounts_info(FIRST_REGISTERED_CUSTOMER_ID).json()[0]["id"]
+    second_account_id = user_api_steps.create_account_for_existing_user(FIRST_REGISTERED_CUSTOMER_ID,
+                                                                        account_types["CHECKING"],
+                                                                        first_account_id).json()["id"]
+    account_api_steps.transfer_money_api(second_account_id, first_account_id, payment_amount)
+
+    account_page_steps.navigate_to_accounts_overview()
+    account_page.navigate_to_account_activity(first_account_id)
+    account_page_assert_steps.check_transaction_info(1, DEFAULT_MIN_BALANCE, test_messages["transfer_sent_message"])
+    account_page_assert_steps.check_transaction_info(2, payment_amount, test_messages["transfer_received_message"])
