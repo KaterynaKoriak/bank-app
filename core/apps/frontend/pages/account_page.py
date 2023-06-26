@@ -48,10 +48,23 @@ class AccountPage(BasePage):
     down_payment_input = browser.element(by.xpath("//input[@id='downPayment']"))
     apply_now_button = browser.element(by.xpath("//input[@value='Apply Now']"))
     loan_request_confirmation_message = browser.element(by.xpath("//p[contains(text(), 'Congratulations')]"))
-    loan_provider = browser.element(by.xpath("//td[@id='loanProviderName']"))
-    loan_date = browser.element(by.xpath("//td[@id='responseDate']"))
-    loan_status = browser.element(by.xpath("//td[@id='loanStatus']"))
-    new_account_number = browser.element(by.xpath("//a[@id='newAccountId']"))
+    loan_provider = browser.element(by.id("loanProviderName"))
+    loan_date = browser.element(by.id("responseDate"))
+    loan_status = browser.element(by.id("loanStatus"))
+    new_account_number = browser.element(by.id("newAccountId"))
+
+    account_id = browser.element(by.id("accountId"))
+    account_type = browser.element(by.id("accountType"))
+    account_balance = browser.element(by.id("balance"))
+    account_available_amount = browser.element(by.id("availableBalance"))
+    selected_transaction_type = browser.element(by.xpath("//select[@id='transactionType']"
+                                                         "/option[@selected='selected']"))
+    selected_accounts_activity_period = browser.element(by.xpath("//select[@id='month']/option[@selected='selected']"))
+
+    @staticmethod
+    def get_transaction_info(number_of_transaction):
+        return browser.elements(by.xpath(f"//tr[@ng-repeat='transaction in transactions']"
+                                         f"[{number_of_transaction}]/td"))
 
     @staticmethod
     def get_accounts_overview_balance(text):
@@ -192,6 +205,10 @@ class AccountPage(BasePage):
     @allure.step('Click "Apply now" button')
     def click_apply_now(self):
         self.apply_now_button.click()
+
+    @allure.step('Click account ID')
+    def navigate_to_account_activity(self, account_id):
+        self.get_accounts_overview_account(account_id).click()
 
 
 account_page = AccountPage()

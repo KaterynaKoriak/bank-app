@@ -18,7 +18,9 @@ test_messages = {'open_account_title': 'ParaBank | Open Account',
                                            'of opening. Please choose an existing account to transfer funds into '
                                            'the new account.',
                  'loan_confirmation_message': 'Congratulations, your loan has been approved.',
-                 'loan_provider': 'Wealth Securities Dynamic Loans (WSDL)'
+                 'loan_provider': 'Wealth Securities Dynamic Loans (WSDL)',
+                 'transfer_received_message': 'Funds Transfer Received',
+                 'transfer_sent_message': 'Funds Transfer Sent'
                  }
 
 account_types = {
